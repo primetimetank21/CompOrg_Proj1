@@ -21,7 +21,7 @@
 		jal getChar           	#jump to getChar, (gets char to store in array)
 		lb $t0, char        	#load the char from char buffer into $t0, stripping NULL byte
 		sb $t0, 0($s1)      	#store the char into the array
-		beq $s0, 10, exit	#if $s0 == 10, jump to exit
+		beq $s0, 10, convert	#if $s0 == 10, jump to convert
 		addi $s1, $s1, 1    	#increments base address of array (get to next element location)
 		j loop              	#jump to start loop
 
@@ -32,7 +32,16 @@
 		syscall         	#store the char byte from input buffer into char
 		addi $s0, $s0, 1	#increment counter
 		jr $ra          	#jump back (into loop label)
-		
+
+	convert:
+		addi $s0, $zero, 0	#reset counter to 0
+	loop2:
+		beq $s0, 10, exit	#if $s0 == 10, jump to exit
+		addi $s0, $s0, 1	#increment counter
+		j loop2			#jump back to loop2		
+	
+	
+	
 	exit:
 		li $v0, 10		#exit_program
 		syscall
