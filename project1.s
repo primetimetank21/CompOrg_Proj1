@@ -1,5 +1,13 @@
-# N = 26 + (02839083 % 11)
-# N = 26 + 5
-# N = 31
-# M = N - 10
-# M = 21
+# Base-N Calculation
+#  N = 26 + (02839083 % 11)
+#  N = 26 + 5
+#  N = 31
+#  M = N - 10
+#  M = 21
+
+.data
+	base_N:  .word 31	# base-N number from calculation
+	Mth_num: .word 21	# Mth number from calculation
+	str:	 .space 6	# 5 bytes for base-N chars, 1 byte for newline and NULL chars
+
+.text
