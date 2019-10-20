@@ -11,3 +11,8 @@
 	str:	 .space 6	# 5 bytes for base-N chars, 1 byte for newline and NULL chars
 
 .text
+	main:
+		li $v0, 8	# read_string
+		la $a0, str	# load value of str into $a0
+		li $a1, 12	# 10 base-N chars, 1 newline char, && 1 NULL char
+		syscall
