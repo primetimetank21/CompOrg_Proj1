@@ -14,16 +14,24 @@
 
 .text
 	main:
+		addi $s0, $zero, 0	#register for tracking input loop value
 		la $s1, array       	#set base address of array to s1
 
-		li $v0, 8       	#call code for read string
+	loop:           	    	#start of loop for reading data
+		jal getChar           	#jump to getChar, (gets char to store in array)
+		lb $t0, char        	#load the char from char buffer into $t0, stripping NULL byte
+		sb $t0, 0($s1)      	#store the char into the array
+		beq $s0, 10, exit	#if $s0 == 10, jump to exit
+		addi $s1, $s1, 1    	#increments base address of array (get to next element location)
+		j loop              	#jump to start loop
+
+	getChar:           		#read char from keyboard buffer and return ascii value
+		li $v0, 8       	#read_string command
 		la $a0, char    	#load address of char for read
 		li $a1, 2      		#length of string is 1byte char and 1byte for null
 		syscall         	#store the char byte from input buffer into char
-
-		lb $t0, char        	#load the char from char buffer into t0, stripping null
-		sb $t0, 0($s1)      	#store the char into the nth elem of array
-		addi $s1, $s1, 1    	#increments base address of array
+		addi $s0, $s0, 1	#increment counter
+		jr $ra          	#jump back (into loop label)
 		
 	exit:
 		li $v0, 10		#exit_program
