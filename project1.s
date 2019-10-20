@@ -12,7 +12,14 @@
 
 .text
 	main:
-		li $v0, 8	# read_string
+		li $v0, 8	# read_string command
 		la $a0, str	# load value of str into $a0
 		li $a1, 12	# 10 base-N chars, 1 newline char, && 1 NULL char
+		syscall
+
+		li $v0, 4	#print_string command
+		la $a0, str	#load value of str into $a0
+		syscall
+
+		li $v0, 10	# exit_program
 		syscall
