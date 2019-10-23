@@ -6,12 +6,12 @@
 #  M = 21
 
 .data
-	array:		.space 11	#10 element array (1 NULL space)
+	array:		.space 40	#10 element array (1 NULL space)
 	array_size:	.word 10	#10 elements in array
 	base_N:  	.word 31	#base-N number from calculation
 	char: 		.space 2	#1 byte for char, 1 byte for NULL
 	Mth_num: 	.word 21	#Mth number from calculation
-	#_word:	 	.space 5	#4 bytes for each int, 1 byte for newline and NULL chars
+	newline:	.asciiz "\n"	#newline character
 
 .text
 	main:
@@ -23,7 +23,7 @@
 		lb $t0, char        	#load the char from char buffer into $t0, stripping NULL byte
 		sb $t0, 0($s1)      	#store the char into the array
 		beq $s0, 10, convert	#if $s0 == 10, jump to convert
-		addi $s1, $s1, 1    	#increments base address of array (get to next element location)
+		addi $s1, $s1, 4    	#increments base address of array (get to next element location)
 		j loop              	#jump to start loop
 
 		getChar:           		#read char from keyboard buffer and return ascii value
@@ -44,6 +44,9 @@
 		loop2:
 			lw $t3, 0($t0)		#$t3 = array[i]
 			addi $t0, $t0, 4	#$t0 = $t0 + 4
+			li $v0, 11		#print_char command
+			move $a0, $t3		#$a0 = $t3
+			syscall
 			beq $s0, 10, exit	#if $s0 == 10, jump to exit
 			addi $s0, $s0, 1	#increment counter
 			j loop2			#jump back to loop2		
