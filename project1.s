@@ -50,24 +50,29 @@
 		add_char:
 			beq $s0, 10, exit	#if $s0 == 10, jump to exit
 			lw $t3, 0($t0)		#$t3 = array[i]
-			blt $t3, 48, _zero
-			
+			blt $t3, 48, _zero	#if array[i] < 48, jump to _zero
+			bgt $t3, 57, check_upper#if array[i] > 57, jump to check_upper
+			addi $t3, $t3, -48	#else, $t3 = array[i] - 48
 			
 			
 			
 			
 			_return:
 			
-
+			add $s1, $s1, $t3	#adds $t3 to total sum
 			addi $t0, $t0, 4	#$t0 = $t0 + 4
 			addi $s0, $s0, 1	#increment counter
 			j add_char		#jump back to add_char		
 			
 			_zero:
-				move $t3, $zero
-				add $s1, $s1, $t3
-				j _return
+				move $t3, $zero   #array[i] = 0
+				j _return	  #jumps to _return
+
+			check_upper:
 				
+				j _return	  #jumps to _return
+
+			check_lower:
 	
 	
 	
