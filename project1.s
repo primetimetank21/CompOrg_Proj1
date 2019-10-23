@@ -12,6 +12,7 @@
 	char: 		.space 2	#1 byte for char, 1 byte for NULL
 	Mth_num: 	.word 21	#Mth number from calculation
 	newline:	.asciiz "\n"	#newline character
+	#_word:	 	.space 5	#4 bytes for each int, 1 byte for newline and NULL chars
 
 .text
 	main:
@@ -35,6 +36,10 @@
 			jr $ra          	#jump back (into loop label)
 
 	convert:
+		li $v0, 4
+		la $a0, newline
+		syscall
+		
 		move $s0, $zero		#reset counter to 0
 		lw $t4, array_size	#$t4 = size
 		la $t0, array		#$t0 = address of array[0] (aka &array[0])
@@ -44,9 +49,13 @@
 		loop2:
 			lw $t3, 0($t0)		#$t3 = array[i]
 			addi $t0, $t0, 4	#$t0 = $t0 + 4
-			li $v0, 11		#print_char command
-			move $a0, $t3		#$a0 = $t3
+			li $v0, 11	#print_char command
+			move $a0, $t3
 			syscall
+
+				
+			
+
 			beq $s0, 10, exit	#if $s0 == 10, jump to exit
 			addi $s0, $s0, 1	#increment counter
 			j loop2			#jump back to loop2		
