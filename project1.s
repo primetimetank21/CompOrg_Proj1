@@ -45,23 +45,35 @@
 		la $t0, array		#$t0 = address of array[0] (aka &array[0])
 		sll $t1, $t4, 2		#$t1 = size * 4
 		add $t2, $t0, $t1	#$t2 = address of array[size] (aka &array[size])
+		move $s1, $zero		#$s1 = 0 (and will serve as a total sum)
 
-		loop2:
+		add_char:
+			beq $s0, 10, exit	#if $s0 == 10, jump to exit
 			lw $t3, 0($t0)		#$t3 = array[i]
-			addi $t0, $t0, 4	#$t0 = $t0 + 4
-			li $v0, 11	#print_char command
-			move $a0, $t3
-			syscall
-
-				
+			blt $t3, 48, _zero
+			
+			
+			
+			
+			
+			_return:
 			
 
-			beq $s0, 10, exit	#if $s0 == 10, jump to exit
+			addi $t0, $t0, 4	#$t0 = $t0 + 4
 			addi $s0, $s0, 1	#increment counter
-			j loop2			#jump back to loop2		
+			j add_char		#jump back to add_char		
+			
+			_zero:
+				move $t3, $zero
+				add $s1, $s1, $t3
+				j _return
+				
 	
 	
 	
 	exit:
-		li $v0, 10		#exit_program
-		syscall
+		li $v0, 1		#print_int command
+		move $a0, $s1		#$a0 = total sum
+		syscall			#prints total sum
+		li $v0, 10		#exit_program command
+		syscall			#terminates program
